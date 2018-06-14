@@ -73,7 +73,7 @@ namespace Identity.Controllers
         {
             get
             {
-                return HttpContext.GetOwinContext().GetUserManager<AppUserManager>(); 
+                return HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
             }
         }
     }
