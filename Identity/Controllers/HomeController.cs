@@ -12,9 +12,25 @@ namespace Identity.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("Placeholder", "Placeholder");
-            return View(data);
+            return View(GetData("Index"));
+        }
+
+        [Authorize(Roles = "qew")]
+        public ActionResult OtherAction()
+        {
+            return View("Index", GetData("OtherAction"));
+        }
+
+        private Dictionary<string, object> GetData(string actionName)
+        {
+            Dictionary<string, object> dict
+                = new Dictionary<string, object>();
+            dict.Add("Action", actionName);
+            dict.Add("User", HttpContext.User.Identity.Name);
+            dict.Add("Authenticated", HttpContext.User.Identity.IsAuthenticated);
+            dict.Add("Auth Type", HttpContext.User.Identity.AuthenticationType);
+            dict.Add("In Users Role", HttpContext.User.IsInRole("Users"));
+            return dict;
         }
     }
 }

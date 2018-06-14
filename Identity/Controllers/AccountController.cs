@@ -19,8 +19,9 @@ namespace Identity.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            if (ModelState.IsValid)
+            if (HttpContext.User.Identity.IsAuthenticated)
             {
+                return View("Error", new string[] { "Access Denied" });
             }
             ViewBag.returnUrl = returnUrl;
             return View();
@@ -53,6 +54,12 @@ namespace Identity.Controllers
             }
             ViewBag.returnUrl = returnUrl;
             return View(details);
+        }
+        [Authorize]
+        public ActionResult Logout()
+        {
+            AuthManager.SignOut();
+            return RedirectToAction("Index", "Home");
         }
 
         private IAuthenticationManager AuthManager

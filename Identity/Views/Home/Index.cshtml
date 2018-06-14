@@ -1,9 +1,5 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
+﻿@{ ViewBag.Title = "Index"; }
 
-<h2>Index</h2>
 <div class="panel panel-primary">
     <div class="panel-heading">User Details</div>
     <table class="table table-striped">
@@ -17,3 +13,4 @@
     </table>
 </div>
 
+@Html.ActionLink("Sign Out", "Logout", "Account", null, new { @class = "btn btn-primary" }) 
