@@ -154,6 +154,7 @@
     <Compile Include="Infrustructure\AppIdentityDbContext.cs" />
     <Compile Include="Infrustructure\AppRoleManager.cs" />
     <Compile Include="Infrustructure\AppUserManager.cs" />
+    <Compile Include="Infrustructure\CertificateUtil.cs" />
     <Compile Include="Infrustructure\CustomSecurityTokenService.cs" />
     <Compile Include="Infrustructure\CustomSecurityTokenServiceConfiguration.cs" />
     <Compile Include="Infrustructure\IdentityHelper.cs" />
@@ -206,7 +207,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>63415</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:63415/</IISUrl>
+          <IISUrl>http://localhost:5000/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
