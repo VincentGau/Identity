@@ -14,8 +14,8 @@ namespace Identity.Infrustructure
     public class CustomSecurityTokenService : SecurityTokenService
     {
 
-        //static readonly string[] _addressExpected = { };
-        static readonly string _addressExpected = "http://localhost:5001";
+        static readonly string[] _addressExpected = { };
+        //static readonly string _addressExpected = "http://localhost:5001";
 
         // Certificate Constants
         private const string SIGNING_CERTIFICATE_NAME = "CN=localhost";
@@ -37,6 +37,15 @@ namespace Identity.Infrustructure
             _encryptingCreds = new X509EncryptingCredentials(CertificateUtil.GetCertificate(StoreName.My, StoreLocation.LocalMachine, ENCRYPTING_CERTIFICATE_NAME));
         }
 
+
+        /// <summary>
+        /// This method returns the configuration for the token issuance request. The configuration
+        /// is represented by the Scope class. In our case, we are only capable of issuing a token to a
+        /// single RP identity represented by the _encryptingCreds field.
+        /// </summary>
+        /// <param name="principal">The caller's principal</param>
+        /// <param name="request">The incoming RST</param>
+        /// <returns></returns>
         protected override Scope GetScope(ClaimsPrincipal principal, RequestSecurityToken request)
         {
             ValidateAppliesTo(request.AppliesTo);
@@ -63,6 +72,15 @@ namespace Identity.Infrustructure
             return scope;
         }
 
+
+        /// <summary>
+        /// This method returns the content of the issued token. The content is represented as a set of
+        /// IClaimIdentity intances, each instance corresponds to a single issued token. Currently, the Windows Identity Foundation only
+        /// supports a single token issuance, so the returned collection must always contain only a single instance.
+        /// </summary>
+        /// <param name="scope">The scope that was previously returned by GetScope method</param>
+        /// <param name="principal">The caller's principal</param>
+        /// <param name="request">The incoming RST, we don't use this in our implementation</param>
         protected override ClaimsIdentity GetOutputClaimsIdentity(ClaimsPrincipal principal, RequestSecurityToken request, Scope scope)
         {
             //ClaimsIdentity outgoingIdentity = new ClaimsIdentity();
@@ -79,12 +97,11 @@ namespace Identity.Infrustructure
 
         void ValidateAppliesTo(EndpointReference appliesTo)
         {
-            if (appliesTo == null)
-            {
-                throw new InvalidRequestException("The appliesTo is null.");
-            }
+            if (_addressExpected == null || _addressExpected.Length == 0) return;
 
-            if (!appliesTo.Uri.Equals(new Uri(_addressExpected)))
+            var validAppliesTo = Enumerable.Any(_addressExpected, x => appliesTo.Uri.Equals(x));
+
+            if (!validAppliesTo)
             {
                 throw new InvalidRequestException(String.Format("The relying party address is not valid. Expected value is {0}, the actual value is {1}.", _addressExpected, appliesTo.Uri.AbsoluteUri));
             }
