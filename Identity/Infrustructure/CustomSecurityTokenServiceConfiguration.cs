@@ -10,7 +10,7 @@ namespace Identity.Infrustructure
 {
     public class CustomSecurityTokenServiceConfiguration : SecurityTokenServiceConfiguration
     {
-        private const string SIGNING_CERTIFICATE_NAME = "CN=localhost";
+        private const string SIGNING_CERTIFICATE_NAME = "CN=MySTSCert2";
         public CustomSecurityTokenServiceConfiguration() : base("http://localhost:5000", new X509SigningCredentials(CertificateUtil.GetCertificate(StoreName.My, StoreLocation.LocalMachine, SIGNING_CERTIFICATE_NAME)))
         {
             SecurityTokenService = typeof(CustomSecurityTokenService);

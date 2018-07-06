@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IdentityModel;
 using System.IdentityModel.Configuration;
 using System.IdentityModel.Protocols.WSTrust;
@@ -18,8 +19,10 @@ namespace Identity.Infrustructure
         //static readonly string _addressExpected = "http://localhost:5001";
 
         // Certificate Constants
-        private const string SIGNING_CERTIFICATE_NAME = "CN=localhost";
-        private const string ENCRYPTING_CERTIFICATE_NAME = "CN=localhost";
+        //private const string SIGNING_CERTIFICATE_NAME = "CN=localhost";
+        //private const string ENCRYPTING_CERTIFICATE_NAME = "CN=localhost";
+        private const string SIGNING_CERTIFICATE_NAME = "CN=MySTSCert2";
+        private const string ENCRYPTING_CERTIFICATE_NAME = "CN=MySTSCert2";
 
         private SigningCredentials _signingCreds;
         private EncryptingCredentials _encryptingCreds;
@@ -28,13 +31,16 @@ namespace Identity.Infrustructure
             : base(configuration)
         {
             // Setup the certificate our STS is going to use to sign the issued tokens
-            _signingCreds = new X509SigningCredentials(CertificateUtil.GetCertificate(StoreName.My, StoreLocation.LocalMachine, SIGNING_CERTIFICATE_NAME));
+            //_signingCreds = new X509SigningCredentials(CertificateUtil.GetCertificate(StoreName.My, StoreLocation.LocalMachine, SIGNING_CERTIFICATE_NAME));
+            _signingCreds = new X509SigningCredentials(CertificateUtil.GetCertificateFromFile(System.Web.HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["CertName"])));
+
 
             // Note: In this sample app only a si   ngle RP identity is shown, which is localhost, and the certificate of that RP is 
             // populated as _encryptingCreds
             // If you have multiple RPs for the STS you would select the certificate that is specific to 
             // the RP that requests the token and then use that for _encryptingCreds
-            _encryptingCreds = new X509EncryptingCredentials(CertificateUtil.GetCertificate(StoreName.My, StoreLocation.LocalMachine, ENCRYPTING_CERTIFICATE_NAME));
+            //_encryptingCreds = new X509EncryptingCredentials(CertificateUtil.GetCertificate(StoreName.My, StoreLocation.LocalMachine, ENCRYPTING_CERTIFICATE_NAME));
+            _encryptingCreds = new X509EncryptingCredentials(CertificateUtil.GetCertificateFromFile(System.Web.HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["CertName"])));
         }
 
 

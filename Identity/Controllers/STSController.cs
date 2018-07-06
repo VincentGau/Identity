@@ -1,6 +1,7 @@
 ﻿using Identity.Infrustructure;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IdentityModel.Configuration;
 using System.IdentityModel.Services;
 using System.IdentityModel.Tokens;
@@ -37,7 +38,11 @@ namespace Identity.Controllers
         {
             var requestMessage = (SignInRequestMessage)WSFederationMessage.CreateFromUri(url);
 
-            var _signingCreds = new X509SigningCredentials(CertificateUtil.GetCertificate(StoreName.My, StoreLocation.LocalMachine, "CN=localhost"));
+            //var _signingCreds = new X509SigningCredentials(CertificateUtil.GetCertificate(StoreName.My, StoreLocation.LocalMachine, "CN=localhost"));
+            //var _signingCreds = new X509SigningCredentials(CertificateUtil.GetCertificate(StoreName.My, StoreLocation.LocalMachine, "CN=MySTSCert2"));
+            var _signingCreds = new X509SigningCredentials(CertificateUtil.GetCertificateFromFile(System.Web.HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["CertName"])));
+
+
             var config = new SecurityTokenServiceConfiguration("http://localhost:5000", _signingCreds);
             var sts = new CustomSecurityTokenService(config);
 

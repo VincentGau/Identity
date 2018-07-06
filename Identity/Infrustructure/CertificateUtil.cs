@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Web;
@@ -61,6 +63,14 @@ namespace Identity.Infrustructure
 
                 store.Close();
             }
+        }
+
+        public static X509Certificate2 GetCertificateFromFile(string certFilePath)
+        {
+            if (File.Exists(certFilePath))
+                return new X509Certificate2(certFilePath, ConfigurationManager.AppSettings["CertPwd"], X509KeyStorageFlags.MachineKeySet);
+            else
+                throw new Exception(string.Format("No certificate file was found. {0}", certFilePath));
         }
     }
 }
