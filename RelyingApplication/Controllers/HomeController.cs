@@ -9,7 +9,7 @@ namespace RelyingApplication.Controllers
 {
     public class HomeController : Controller
     {
-        [Authorize]
+        [CustomAuthorize(Roles = "testRole,testRole2")]
         public ActionResult Index()
         {
             ViewBag.ClaimsIdentity = Thread.CurrentPrincipal.Identity;
